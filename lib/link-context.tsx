@@ -15,11 +15,13 @@ export interface Link {
 interface LinkContextType {
   links: Link[]
   addLink: (link: Link) => void
+  removeLink: (url: string) => void
 }
 
 const LinkContext = createContext<LinkContextType>({
   links: initialLinks,
   addLink: () => {},
+  removeLink: () => {},
 })
 
 export function LinkProvider({ children }: { children: React.ReactNode }) {
@@ -29,8 +31,12 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     setLinks((prev) => [link, ...prev])
   }
 
+  const removeLink = (url: string) => {
+    setLinks((prev) => prev.filter((l) => l.url !== url))
+  }
+
   return (
-    <LinkContext.Provider value={{ links, addLink }}>
+    <LinkContext.Provider value={{ links, addLink, removeLink }}>
       {children}
     </LinkContext.Provider>
   )

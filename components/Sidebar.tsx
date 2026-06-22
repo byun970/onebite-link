@@ -1,30 +1,61 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useFolders } from '@/lib/folder-context'
+import DeleteFolderModal from '@/components/DeleteFolderModal'
+
+function TrashIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.75 3.5h10.5M5.25 3.5V2.333a.583.583 0 0 1 .583-.583h2.334a.583.583 0 0 1 .583.583V3.5M11.083 3.5l-.583 8.167H3.5L2.917 3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M5.833 6.417v3.5M8.167 6.417v3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  )
+}
 
 export default function Sidebar() {
   const { folders } = useFolders()
+  const [folderToDelete, setFolderToDelete] = useState<string | null>(null)
 
   return (
-    <aside className="fixed top-12 left-0 w-52 h-[calc(100vh-3rem)] border-r border-[var(--border)] bg-[var(--card-bg)] px-3 py-4 flex flex-col gap-0.5">
-      <Link
-        href="/"
-        className="sidebar-link w-full px-3 py-2 rounded-[6px] text-sm font-semibold text-[var(--accent)] bg-[var(--hover-bg)] transition-colors duration-150"
-      >
-        전체
-      </Link>
-      <div className="mt-2 flex flex-col gap-0.5">
-        {folders.map((folder) => (
-          <Link
-            key={folder}
-            href={`/folder/${folder}`}
-            className="sidebar-link w-full px-3 py-2 rounded-[6px] text-sm text-[var(--text)] transition-colors duration-150"
-          >
-            📁 {folder}
-          </Link>
-        ))}
-      </div>
-    </aside>
+    <>
+      <aside className="fixed top-12 left-0 w-52 h-[calc(100vh-3rem)] border-r border-[var(--border)] bg-[var(--card-bg)] px-3 py-4 flex flex-col gap-0.5">
+        <Link
+          href="/"
+          className="sidebar-link w-full px-3 py-2 rounded-[6px] text-sm font-semibold text-[var(--accent)] bg-[var(--hover-bg)] transition-colors duration-150"
+        >
+          전체
+        </Link>
+        <div className="mt-2 flex flex-col gap-0.5">
+          {folders.map((folder) => (
+            <div
+              key={folder}
+              className="group sidebar-link flex items-center rounded-[6px] transition-colors duration-150"
+            >
+              <Link
+                href={`/folder/${folder}`}
+                className="flex-1 px-3 py-2 text-sm text-[var(--text)] truncate"
+              >
+                📁 {folder}
+              </Link>
+              <button
+                onClick={() => setFolderToDelete(folder)}
+                className="opacity-0 group-hover:opacity-100 mr-2 p-1 rounded text-[var(--text-sub)] hover:text-[var(--error)] transition-all duration-150 flex-shrink-0"
+                aria-label={`${folder} 폴더 삭제`}
+              >
+                <TrashIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+      </aside>
+      {folderToDelete && (
+        <DeleteFolderModal
+          folder={folderToDelete}
+          onClose={() => setFolderToDelete(null)}
+        />
+      )}
+    </>
   )
 }

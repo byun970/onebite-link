@@ -6,11 +6,13 @@ import { folders as initialFolders } from '@/lib/data'
 interface FolderContextType {
   folders: string[]
   addFolder: (name: string) => void
+  removeFolder: (name: string) => void
 }
 
 const FolderContext = createContext<FolderContextType>({
   folders: initialFolders,
   addFolder: () => {},
+  removeFolder: () => {},
 })
 
 export function FolderProvider({ children }: { children: React.ReactNode }) {
@@ -22,8 +24,12 @@ export function FolderProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const removeFolder = (name: string) => {
+    setFolders((prev) => prev.filter((f) => f !== name))
+  }
+
   return (
-    <FolderContext.Provider value={{ folders, addFolder }}>
+    <FolderContext.Provider value={{ folders, addFolder, removeFolder }}>
       {children}
     </FolderContext.Provider>
   )

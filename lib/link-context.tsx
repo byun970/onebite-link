@@ -12,16 +12,24 @@ export interface Link {
   thumbnail?: string | null
 }
 
+export interface LinkPatch {
+  title: string
+  description: string
+  folder: string
+}
+
 interface LinkContextType {
   links: Link[]
   addLink: (link: Link) => void
   removeLink: (url: string) => void
+  updateLink: (url: string, patch: LinkPatch) => void
 }
 
 const LinkContext = createContext<LinkContextType>({
   links: initialLinks,
   addLink: () => {},
   removeLink: () => {},
+  updateLink: () => {},
 })
 
 export function LinkProvider({ children }: { children: React.ReactNode }) {
@@ -35,8 +43,12 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     setLinks((prev) => prev.filter((l) => l.url !== url))
   }
 
+  const updateLink = (url: string, patch: LinkPatch) => {
+    setLinks((prev) => prev.map((l) => l.url === url ? { ...l, ...patch } : l))
+  }
+
   return (
-    <LinkContext.Provider value={{ links, addLink, removeLink }}>
+    <LinkContext.Provider value={{ links, addLink, removeLink, updateLink }}>
       {children}
     </LinkContext.Provider>
   )

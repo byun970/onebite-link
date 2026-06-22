@@ -3,6 +3,15 @@
 import { useState } from 'react'
 import { Link } from '@/lib/link-context'
 import DeleteLinkModal from '@/components/DeleteLinkModal'
+import EditLinkModal from '@/components/EditLinkModal'
+
+function PencilIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.917 1.75a1.237 1.237 0 0 1 1.75 1.75L4.083 11.083 1.75 11.667l.583-2.334L9.917 1.75Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
 
 function TrashIcon() {
   return (
@@ -14,18 +23,28 @@ function TrashIcon() {
 }
 
 export default function LinkCard({ title, url, description, folder, color, thumbnail }: Link) {
-  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   return (
     <>
       <div className="card-hover relative flex flex-col rounded-[8px] border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden cursor-pointer transition-colors duration-150 group">
-        <button
-          onClick={(e) => { e.stopPropagation(); setShowModal(true) }}
-          className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 p-1.5 rounded-[6px] bg-black/40 text-white hover:bg-black/60 transition-all duration-150"
-          aria-label="링크 삭제"
-        >
-          <TrashIcon />
-        </button>
+        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-all duration-150">
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowEditModal(true) }}
+            className="p-1.5 rounded-[6px] bg-black/40 text-white hover:bg-black/60 transition-colors duration-150"
+            aria-label="링크 수정"
+          >
+            <PencilIcon />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowDeleteModal(true) }}
+            className="p-1.5 rounded-[6px] bg-black/40 text-white hover:bg-black/60 transition-colors duration-150"
+            aria-label="링크 삭제"
+          >
+            <TrashIcon />
+          </button>
+        </div>
 
         {thumbnail ? (
           <div className="h-28 overflow-hidden">
@@ -60,11 +79,20 @@ export default function LinkCard({ title, url, description, folder, color, thumb
         </div>
       </div>
 
-      {showModal && (
+      {showDeleteModal && (
         <DeleteLinkModal
           title={title}
           url={url}
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowDeleteModal(false)}
+        />
+      )}
+      {showEditModal && (
+        <EditLinkModal
+          url={url}
+          initialTitle={title}
+          initialDescription={description}
+          initialFolder={folder}
+          onClose={() => setShowEditModal(false)}
         />
       )}
     </>

@@ -4,6 +4,15 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useFolders } from '@/lib/folder-context'
 import DeleteFolderModal from '@/components/DeleteFolderModal'
+import EditFolderModal from '@/components/EditFolderModal'
+
+function PencilIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.917 1.75a1.237 1.237 0 0 1 1.75 1.75L4.083 11.083 1.75 11.667l.583-2.334L9.917 1.75Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
 
 function TrashIcon() {
   return (
@@ -17,6 +26,7 @@ function TrashIcon() {
 export default function Sidebar() {
   const { folders } = useFolders()
   const [folderToDelete, setFolderToDelete] = useState<string | null>(null)
+  const [folderToEdit, setFolderToEdit] = useState<string | null>(null)
 
   return (
     <>
@@ -39,13 +49,22 @@ export default function Sidebar() {
               >
                 📁 {folder}
               </Link>
-              <button
-                onClick={() => setFolderToDelete(folder)}
-                className="opacity-0 group-hover:opacity-100 mr-2 p-1 rounded text-[var(--text-sub)] hover:text-[var(--error)] transition-all duration-150 flex-shrink-0"
-                aria-label={`${folder} 폴더 삭제`}
-              >
-                <TrashIcon />
-              </button>
+              <div className="opacity-0 group-hover:opacity-100 flex items-center gap-0.5 mr-2 flex-shrink-0 transition-all duration-150">
+                <button
+                  onClick={() => setFolderToEdit(folder)}
+                  className="p-1 rounded text-[var(--text-sub)] hover:text-[var(--accent)] transition-colors duration-150"
+                  aria-label={`${folder} 폴더 수정`}
+                >
+                  <PencilIcon />
+                </button>
+                <button
+                  onClick={() => setFolderToDelete(folder)}
+                  className="p-1 rounded text-[var(--text-sub)] hover:text-[var(--error)] transition-colors duration-150"
+                  aria-label={`${folder} 폴더 삭제`}
+                >
+                  <TrashIcon />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -54,6 +73,12 @@ export default function Sidebar() {
         <DeleteFolderModal
           folder={folderToDelete}
           onClose={() => setFolderToDelete(null)}
+        />
+      )}
+      {folderToEdit && (
+        <EditFolderModal
+          folder={folderToEdit}
+          onClose={() => setFolderToEdit(null)}
         />
       )}
     </>

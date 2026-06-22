@@ -1,27 +1,20 @@
+'use client'
+
 import LinkCard from '@/components/LinkCard'
+import { useLinks } from '@/lib/link-context'
 
-interface Link {
-  title: string
-  url: string
-  description: string
-  folder: string
-  color: string
-}
+export default function LinkGrid({ title, folder }: { title: string; folder?: string }) {
+  const { links } = useLinks()
+  const filtered = folder ? links.filter((l) => l.folder === folder) : links
 
-interface LinkGridProps {
-  title: string
-  links: Link[]
-}
-
-export default function LinkGrid({ title, links }: LinkGridProps) {
   return (
     <main className="ml-52 pt-12 p-8">
       <h2 className="text-xl font-semibold text-[var(--text)] mb-6">
         {title}{' '}
-        <span className="text-sm font-normal text-[var(--text-sub)]">({links.length})</span>
+        <span className="text-sm font-normal text-[var(--text-sub)]">({filtered.length})</span>
       </h2>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {links.map((link, i) => (
+        {filtered.map((link, i) => (
           <LinkCard key={i} {...link} />
         ))}
       </div>

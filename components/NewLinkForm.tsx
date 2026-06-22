@@ -13,21 +13,21 @@ export default function NewLinkForm() {
   return (
     <form className="flex flex-col gap-5 w-full max-w-lg" onSubmit={(e) => e.preventDefault()}>
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700">링크 URL</label>
+        <label className="text-sm font-medium text-[var(--text)]">링크 URL</label>
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://example.com"
-          className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+          className="px-3 py-2 border border-[var(--border)] rounded-[6px] text-sm text-[var(--text)] placeholder:text-[var(--placeholder)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-150 bg-[var(--card-bg)]"
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700">폴더</label>
+        <label className="text-sm font-medium text-[var(--text)]">폴더</label>
         <select
           value={folder}
           onChange={(e) => setFolder(e.target.value)}
-          className="px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-500 transition-colors bg-white"
+          className="px-3 py-2 border border-[var(--border)] rounded-[6px] text-sm text-[var(--text)] focus:outline-none focus:border-[var(--accent)] transition-colors duration-150 bg-[var(--card-bg)]"
         >
           <option value="">폴더 선택</option>
           {folders.map((f) => (
@@ -38,7 +38,7 @@ export default function NewLinkForm() {
       <button
         type="submit"
         disabled={!isValid}
-        className="mt-2 px-6 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold disabled:opacity-40 hover:bg-blue-700 active:scale-95 transition-all duration-150"
+        className="mt-2 px-6 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--accent-hover)] transition-colors duration-150"
       >
         저장
       </button>

@@ -15,8 +15,11 @@ interface LinkGridProps {
 
 export default function LinkGrid({ title, links }: LinkGridProps) {
   return (
-    <main className="ml-52 pt-14 p-8">
-      <h2 className="text-xl font-bold text-gray-800 mb-6">{title} ({links.length})</h2>
+    <main className="ml-52 pt-12 p-8">
+      <h2 className="text-xl font-semibold text-[var(--text)] mb-6">
+        {title}{' '}
+        <span className="text-sm font-normal text-[var(--text-sub)]">({links.length})</span>
+      </h2>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {links.map((link, i) => (
           <LinkCard key={i} {...link} />

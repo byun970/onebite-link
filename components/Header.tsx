@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 h-14 flex items-center justify-between px-6 bg-white border-b border-gray-200 z-10">
-      <Link href="/" className="text-lg font-bold text-blue-600 tracking-tight">
+    <header className="nav-bg fixed top-0 left-0 right-0 h-12 flex items-center justify-between px-4 border-b border-[var(--border)] z-10">
+      <Link href="/" className="text-base font-semibold text-[var(--text)] tracking-tight">
         한입 링크
       </Link>
       <Link
         href="/new"
-        className="flex items-center gap-1 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-95 transition-all duration-150"
+        className="flex items-center gap-1 px-4 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium transition-colors duration-150 hover:bg-[var(--accent-hover)]"
       >
         <span className="text-base leading-none">+</span>
         새 링크

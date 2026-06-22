@@ -9,7 +9,7 @@ export default async function FolderPage({ params }: { params: Promise<{ folderI
   const filtered = links.filter((link) => link.folder === folderName)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--bg)]">
       <Header />
       <Sidebar />
       <LinkGrid title={`📁 ${folderName}`} links={filtered} />

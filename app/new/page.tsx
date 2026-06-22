@@ -4,11 +4,11 @@ import NewLinkForm from '@/components/NewLinkForm'
 
 export default function NewPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--bg)]">
       <Header />
       <Sidebar />
-      <main className="ml-52 pt-14 p-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-6">새 링크 추가</h2>
+      <main className="ml-52 pt-12 p-8">
+        <h2 className="text-xl font-semibold text-[var(--text)] mb-6">새 링크 추가</h2>
         <NewLinkForm />
       </main>
     </div>

@@ -10,13 +10,14 @@ interface EditFolderModalProps {
 
 export default function EditFolderModal({ folder, onClose }: EditFolderModalProps) {
   const [name, setName] = useState(folder.name)
+  const [loading, setLoading] = useState(false)
   const { renameFolder } = useFolders()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (name.trim() && name.trim() !== folder.name) {
-      renameFolder(folder.id, name.trim())
-    }
+    if (!name.trim() || name.trim() === folder.name || loading) return
+    setLoading(true)
+    await renameFolder(folder.id, name.trim())
     onClose()
   }
 
@@ -45,10 +46,10 @@ export default function EditFolderModal({ folder, onClose }: EditFolderModalProp
             </button>
             <button
               type="submit"
-              disabled={!name.trim() || name.trim() === folder.name}
+              disabled={!name.trim() || name.trim() === folder.name || loading}
               className="px-4 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--accent-hover)] transition-colors duration-150"
             >
-              저장
+              {loading ? '저장 중...' : '저장'}
             </button>
           </div>
         </form>

@@ -5,14 +5,15 @@ import { useFolders } from '@/lib/folder-context'
 
 export default function NewFolderModal({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState('')
+  const [loading, setLoading] = useState(false)
   const { addFolder } = useFolders()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (name.trim()) {
-      addFolder(name.trim())
-      onClose()
-    }
+    if (!name.trim() || loading) return
+    setLoading(true)
+    await addFolder(name.trim())
+    onClose()
   }
 
   return (
@@ -41,10 +42,10 @@ export default function NewFolderModal({ onClose }: { onClose: () => void }) {
             </button>
             <button
               type="submit"
-              disabled={!name.trim()}
+              disabled={!name.trim() || loading}
               className="px-4 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--accent-hover)] transition-colors duration-150"
             >
-              저장
+              {loading ? '저장 중...' : '저장'}
             </button>
           </div>
         </form>

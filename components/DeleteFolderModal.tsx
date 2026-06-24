@@ -1,9 +1,9 @@
 'use client'
 
-import { useFolders } from '@/lib/folder-context'
+import { useFolders, Folder } from '@/lib/folder-context'
 
 interface DeleteFolderModalProps {
-  folder: string
+  folder: Folder
   onClose: () => void
 }
 
@@ -11,7 +11,7 @@ export default function DeleteFolderModal({ folder, onClose }: DeleteFolderModal
   const { removeFolder } = useFolders()
 
   const handleDelete = () => {
-    removeFolder(folder)
+    removeFolder(folder.id)
     onClose()
   }
 
@@ -24,7 +24,7 @@ export default function DeleteFolderModal({ folder, onClose }: DeleteFolderModal
         <div className="flex flex-col gap-1.5">
           <h3 className="text-base font-semibold text-[var(--text)]">폴더 삭제</h3>
           <p className="text-sm text-[var(--text-sub)]">
-            <span className="font-medium text-[var(--text)]">{folder}</span> 폴더를 삭제할까요?
+            <span className="font-medium text-[var(--text)]">{folder.name}</span> 폴더를 삭제할까요?
           </p>
         </div>
         <div className="flex justify-end gap-2">

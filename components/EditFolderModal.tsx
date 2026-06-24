@@ -1,21 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import { useFolders } from '@/lib/folder-context'
+import { useFolders, Folder } from '@/lib/folder-context'
 
 interface EditFolderModalProps {
-  folder: string
+  folder: Folder
   onClose: () => void
 }
 
 export default function EditFolderModal({ folder, onClose }: EditFolderModalProps) {
-  const [name, setName] = useState(folder)
+  const [name, setName] = useState(folder.name)
   const { renameFolder } = useFolders()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (name.trim() && name.trim() !== folder) {
-      renameFolder(folder, name.trim())
+    if (name.trim() && name.trim() !== folder.name) {
+      renameFolder(folder.id, name.trim())
     }
     onClose()
   }
@@ -45,7 +45,7 @@ export default function EditFolderModal({ folder, onClose }: EditFolderModalProp
             </button>
             <button
               type="submit"
-              disabled={!name.trim() || name.trim() === folder}
+              disabled={!name.trim() || name.trim() === folder.name}
               className="px-4 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--accent-hover)] transition-colors duration-150"
             >
               저장

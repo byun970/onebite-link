@@ -81,7 +81,7 @@ export default function NewLinkForm() {
         >
           <option value="">폴더 선택</option>
           {folders.map((f) => (
-            <option key={f} value={f}>{f}</option>
+            <option key={f.id} value={f.name}>{f.name}</option>
           ))}
         </select>
       </div>

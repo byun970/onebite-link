@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useFolders } from '@/lib/folder-context'
+import { useFolders, Folder } from '@/lib/folder-context'
 import DeleteFolderModal from '@/components/DeleteFolderModal'
 import EditFolderModal from '@/components/EditFolderModal'
 
@@ -25,8 +25,8 @@ function TrashIcon() {
 
 export default function Sidebar() {
   const { folders } = useFolders()
-  const [folderToDelete, setFolderToDelete] = useState<string | null>(null)
-  const [folderToEdit, setFolderToEdit] = useState<string | null>(null)
+  const [folderToDelete, setFolderToDelete] = useState<Folder | null>(null)
+  const [folderToEdit, setFolderToEdit] = useState<Folder | null>(null)
 
   return (
     <>
@@ -40,27 +40,27 @@ export default function Sidebar() {
         <div className="mt-2 flex flex-col gap-0.5">
           {folders.map((folder) => (
             <div
-              key={folder}
+              key={folder.id}
               className="group sidebar-link flex items-center rounded-[6px] transition-colors duration-150"
             >
               <Link
-                href={`/folder/${folder}`}
+                href={`/folder/${encodeURIComponent(folder.name)}`}
                 className="flex-1 px-3 py-2 text-sm text-[var(--text)] truncate"
               >
-                📁 {folder}
+                📁 {folder.name}
               </Link>
               <div className="opacity-0 group-hover:opacity-100 flex items-center gap-0.5 mr-2 flex-shrink-0 transition-all duration-150">
                 <button
                   onClick={() => setFolderToEdit(folder)}
                   className="p-1 rounded text-[var(--text-sub)] hover:text-[var(--accent)] transition-colors duration-150"
-                  aria-label={`${folder} 폴더 수정`}
+                  aria-label={`${folder.name} 폴더 수정`}
                 >
                   <PencilIcon />
                 </button>
                 <button
                   onClick={() => setFolderToDelete(folder)}
                   className="p-1 rounded text-[var(--text-sub)] hover:text-[var(--error)] transition-colors duration-150"
-                  aria-label={`${folder} 폴더 삭제`}
+                  aria-label={`${folder.name} 폴더 삭제`}
                 >
                   <TrashIcon />
                 </button>

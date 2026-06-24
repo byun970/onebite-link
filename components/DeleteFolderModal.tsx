@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useFolders, Folder } from '@/lib/folder-context'
 
 interface DeleteFolderModalProps {
@@ -8,10 +9,13 @@ interface DeleteFolderModalProps {
 }
 
 export default function DeleteFolderModal({ folder, onClose }: DeleteFolderModalProps) {
+  const [loading, setLoading] = useState(false)
   const { removeFolder } = useFolders()
 
-  const handleDelete = () => {
-    removeFolder(folder.id)
+  const handleDelete = async () => {
+    if (loading) return
+    setLoading(true)
+    await removeFolder(folder.id)
     onClose()
   }
 
@@ -38,9 +42,10 @@ export default function DeleteFolderModal({ folder, onClose }: DeleteFolderModal
           <button
             type="button"
             onClick={handleDelete}
-            className="px-4 py-2 rounded-[6px] bg-[var(--error)] text-white text-sm font-medium hover:opacity-90 transition-opacity duration-150"
+            disabled={loading}
+            className="px-4 py-2 rounded-[6px] bg-[var(--error)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-opacity duration-150"
           >
-            삭제
+            {loading ? '삭제 중...' : '삭제'}
           </button>
         </div>
       </div>

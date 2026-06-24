@@ -22,7 +22,7 @@ function TrashIcon() {
   )
 }
 
-export default function LinkCard({ title, url, description, folder, color, thumbnail }: Link) {
+export default function LinkCard({ title, url, description, folder, color, thumbnail_url }: Link) {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
 
@@ -46,11 +46,11 @@ export default function LinkCard({ title, url, description, folder, color, thumb
           </button>
         </div>
 
-        {thumbnail ? (
+        {thumbnail_url ? (
           <div className="h-28 overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={thumbnail}
+              src={thumbnail_url}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
             />

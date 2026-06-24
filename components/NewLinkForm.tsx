@@ -5,17 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useLinks } from '@/lib/link-context'
 import { useFolders } from '@/lib/folder-context'
 
-const COLORS = [
-  'bg-sky-500', 'bg-indigo-600', 'bg-purple-500', 'bg-pink-500',
-  'bg-orange-500', 'bg-teal-500', 'bg-green-500', 'bg-gray-700',
-]
-
-function pickColor(folder: string) {
-  let hash = 0
-  for (const c of folder) hash = (hash * 31 + c.charCodeAt(0)) & 0xffffffff
-  return COLORS[Math.abs(hash) % COLORS.length]
-}
-
 export default function NewLinkForm() {
   const [url, setUrl] = useState('')
   const [folder, setFolder] = useState('')
@@ -30,7 +19,7 @@ export default function NewLinkForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isValid) return
+    if (!isValid || loading) return
 
     setLoading(true)
     setError('')
@@ -41,13 +30,14 @@ export default function NewLinkForm() {
 
       if (!res.ok) throw new Error(data.error || '링크 정보를 가져올 수 없습니다')
 
-      addLink({
-        title: data.title || url.trim(),
+      const selectedFolder = folders.find((f) => f.name === folder)
+      await addLink({
         url: data.url || url.trim(),
+        title: data.title || url.trim(),
         description: data.description || '',
+        thumbnail_url: data.image || null,
+        folder_id: selectedFolder?.id ?? null,
         folder,
-        color: pickColor(folder),
-        thumbnail: data.image || null,
       })
 
       router.push('/')

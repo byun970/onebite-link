@@ -3,16 +3,16 @@
 import { useLinks } from '@/lib/link-context'
 
 interface DeleteLinkModalProps {
+  id: number
   title: string
-  url: string
   onClose: () => void
 }
 
-export default function DeleteLinkModal({ title, url, onClose }: DeleteLinkModalProps) {
+export default function DeleteLinkModal({ id, title, onClose }: DeleteLinkModalProps) {
   const { removeLink } = useLinks()
 
-  const handleDelete = () => {
-    removeLink(url)
+  const handleDelete = async () => {
+    await removeLink(id)
     onClose()
   }
 

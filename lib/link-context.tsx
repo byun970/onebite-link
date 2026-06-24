@@ -45,14 +45,14 @@ interface LinkInsert {
 interface LinkContextType {
   links: Link[]
   addLink: (link: LinkInsert) => Promise<void>
-  removeLink: (url: string) => void
+  removeLink: (id: number) => Promise<void>
   updateLink: (id: number, patch: LinkPatch) => Promise<void>
 }
 
 const LinkContext = createContext<LinkContextType>({
   links: [],
   addLink: async () => {},
-  removeLink: () => {},
+  removeLink: async () => {},
   updateLink: async () => {},
 })
 
@@ -112,8 +112,12 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const removeLink = (url: string) => {
-    setLinks((prev) => prev.filter((l) => l.url !== url))
+  const removeLink = async (id: number) => {
+    const supabase = createClient()
+    const { error } = await supabase.from('links').delete().eq('id', id)
+    if (!error) {
+      setLinks((prev) => prev.filter((l) => l.id !== id))
+    }
   }
 
   const updateLink = async (id: number, patch: LinkPatch) => {

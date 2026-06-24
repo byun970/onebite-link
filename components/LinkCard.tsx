@@ -81,8 +81,8 @@ export default function LinkCard({ id, title, url, description, folder, color, t
 
       {showDeleteModal && (
         <DeleteLinkModal
+          id={id}
           title={title}
-          url={url}
           onClose={() => setShowDeleteModal(false)}
         />
       )}

@@ -22,7 +22,7 @@ function TrashIcon() {
   )
 }
 
-export default function LinkCard({ title, url, description, folder, color, thumbnail_url }: Link) {
+export default function LinkCard({ id, title, url, description, folder, color, thumbnail_url }: Link) {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
 
@@ -88,7 +88,7 @@ export default function LinkCard({ title, url, description, folder, color, thumb
       )}
       {showEditModal && (
         <EditLinkModal
-          url={url}
+          id={id}
           initialTitle={title}
           initialDescription={description}
           initialFolder={folder}

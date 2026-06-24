@@ -5,7 +5,7 @@ import { useLinks } from '@/lib/link-context'
 import { useFolders } from '@/lib/folder-context'
 
 interface EditLinkModalProps {
-  url: string
+  id: number
   initialTitle: string
   initialDescription: string
   initialFolder: string
@@ -13,7 +13,7 @@ interface EditLinkModalProps {
 }
 
 export default function EditLinkModal({
-  url,
+  id,
   initialTitle,
   initialDescription,
   initialFolder,
@@ -22,6 +22,7 @@ export default function EditLinkModal({
   const [title, setTitle] = useState(initialTitle)
   const [description, setDescription] = useState(initialDescription)
   const [folder, setFolder] = useState(initialFolder)
+  const [loading, setLoading] = useState(false)
 
   const { updateLink } = useLinks()
   const { folders } = useFolders()
@@ -31,10 +32,17 @@ export default function EditLinkModal({
     description.trim() !== initialDescription ||
     folder !== initialFolder
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!title.trim()) return
-    updateLink(url, { title: title.trim(), description: description.trim(), folder })
+    if (!title.trim() || loading) return
+    setLoading(true)
+    const selectedFolder = folders.find((f) => f.name === folder)
+    await updateLink(id, {
+      title: title.trim(),
+      description: description.trim(),
+      folder,
+      folder_id: selectedFolder?.id ?? null,
+    })
     onClose()
   }
 
@@ -87,10 +95,10 @@ export default function EditLinkModal({
             </button>
             <button
               type="submit"
-              disabled={!title.trim() || !isChanged}
+              disabled={!title.trim() || !isChanged || loading}
               className="px-4 py-2 rounded-[6px] bg-[var(--accent)] text-white text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--accent-hover)] transition-colors duration-150"
             >
-              저장
+              {loading ? '저장 중...' : '저장'}
             </button>
           </div>
         </form>

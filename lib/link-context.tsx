@@ -30,6 +30,7 @@ export interface LinkPatch {
   title: string
   description: string
   folder: string
+  folder_id: number | null
 }
 
 interface LinkInsert {
@@ -45,14 +46,14 @@ interface LinkContextType {
   links: Link[]
   addLink: (link: LinkInsert) => Promise<void>
   removeLink: (url: string) => void
-  updateLink: (url: string, patch: LinkPatch) => void
+  updateLink: (id: number, patch: LinkPatch) => Promise<void>
 }
 
 const LinkContext = createContext<LinkContextType>({
   links: [],
   addLink: async () => {},
   removeLink: () => {},
-  updateLink: () => {},
+  updateLink: async () => {},
 })
 
 function rowToLink(row: {
@@ -115,8 +116,23 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     setLinks((prev) => prev.filter((l) => l.url !== url))
   }
 
-  const updateLink = (url: string, patch: LinkPatch) => {
-    setLinks((prev) => prev.map((l) => l.url === url ? { ...l, ...patch } : l))
+  const updateLink = async (id: number, patch: LinkPatch) => {
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('links')
+      .update({
+        title: patch.title,
+        description: patch.description,
+        folder_id: patch.folder_id,
+      })
+      .eq('id', id)
+    if (!error) {
+      setLinks((prev) =>
+        prev.map((l) =>
+          l.id === id ? { ...l, ...patch, color: pickColor(patch.folder) } : l
+        )
+      )
+    }
   }
 
   return (

@@ -83,6 +83,12 @@ export default function Sidebar() {
         >
           로그아웃
         </button>
+        <Link
+          href="/privacy"
+          className="w-full px-3 py-1.5 rounded-[6px] text-xs text-gray-400 hover:text-gray-500 transition-colors duration-150"
+        >
+          개인정보 처리방침
+        </Link>
       </aside>
       {folderToDelete && (
         <DeleteFolderModal

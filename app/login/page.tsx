@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -44,6 +45,16 @@ export default function LoginPage() {
     }
 
     router.push('/')
+  }
+
+  async function handleKakaoLogin() {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: 'kakao',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
   }
 
   return (
@@ -90,6 +101,16 @@ export default function LoginPage() {
             className="mt-2 w-full bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-[6px] py-2 text-sm font-medium transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? '처리 중...' : '로그인'}
+          </button>
+          <button onClick={handleKakaoLogin} className="w-full">
+            <Image
+              src="/kakao_login_large_wide.png"
+              alt="카카오 로그인"
+              width={600}
+              height={90}
+              className="w-full h-auto"
+              priority
+            />
           </button>
           <p className="text-center text-sm text-[var(--text-sub)]">
             <Link href="/forgot-password" className="text-[var(--accent)] hover:underline">

@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useFolders, Folder } from '@/lib/folder-context'
 import DeleteFolderModal from '@/components/DeleteFolderModal'
 import EditFolderModal from '@/components/EditFolderModal'
+import { createClient } from '@/lib/supabase/client'
 
 function PencilIcon() {
   return (
@@ -27,6 +29,13 @@ export default function Sidebar() {
   const { folders } = useFolders()
   const [folderToDelete, setFolderToDelete] = useState<Folder | null>(null)
   const [folderToEdit, setFolderToEdit] = useState<Folder | null>(null)
+  const router = useRouter()
+
+  async function handleLogout() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
     <>
@@ -68,6 +77,12 @@ export default function Sidebar() {
             </div>
           ))}
         </div>
+        <button
+          onClick={handleLogout}
+          className="mt-auto w-full px-3 py-2 rounded-[6px] text-sm text-[var(--text-sub)] hover:bg-[var(--hover-bg)] hover:text-[var(--error)] transition-colors duration-150 text-left"
+        >
+          로그아웃
+        </button>
       </aside>
       {folderToDelete && (
         <DeleteFolderModal

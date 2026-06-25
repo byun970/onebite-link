@@ -28,13 +28,25 @@ export function FolderProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase
-      .from('folders')
-      .select('*')
-      .order('created_at', { ascending: true })
-      .then(({ data }) => {
-        if (data) setFolders(data)
-      })
+
+    async function fetchFolders(userId: string) {
+      const { data } = await supabase
+        .from('folders')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+      if (data) setFolders(data)
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        fetchFolders(session.user.id)
+      } else {
+        setFolders([])
+      }
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const addFolder = async (name: string) => {
